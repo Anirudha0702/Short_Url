@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux'
     const getUrls= async () => {
       try {
             const res = await fetch('/api/findUrls', {
-              method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
