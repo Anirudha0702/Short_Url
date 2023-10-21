@@ -6,7 +6,8 @@ The Short URL project is a web application that allows users to generate and sha
 ## Features
 The project includes the following key features:
 1. URL Shortening: Users can enter a long URL and generate a shortened URL using a Hash function.
-3. URL Redirection: The generated shortened URL redirects users to the original long URL when accessed.
-6. User Authentication: Users must log in with gmail account to access  such as managing their shortened URLs and short Url
+2. URL Redirection: The generated shortened URL redirects users to the original long URL when accessed.
+3. User Authentication: Users must log in with gmail account to access  such as managing their shortened URLs and short Url
 
-
+## INFO
+User can access urls by loging in or by visiting short-url-mu-eight.vercel.app/api/[emailID]/[uniqueHashID]

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import {CiLogout} from "react-icons/ci"
 import {AiOutlineLink} from "react-icons/ai"
 import {FaSlackHash} from "react-icons/fa"
@@ -6,6 +7,7 @@ import { useSession ,signIn, signOut, } from 'next-auth/react';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { addUrl } from '@/State/urlSlice';
+
 export const Nav = () => {
   const [url,setUrl]=useState("");
   const [processing,setProcessing]=useState(false);
@@ -14,22 +16,21 @@ export const Nav = () => {
   const user=session.data?.user;
   const handelShort=async(e)=>{
     e.preventDefault();
-    const data={email:user.email,url:url,name:user.name};
+    const newData={email:user.email,url:url,name:user.name};
     try {
-      setUrl("");
       setProcessing(true);
-      const response = await fetch('http://localhost:3000/api/hashUrl',
-      {
-        method: 'POST',
+      const response= await axios.post('/api/hashUrl', newData, {
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      }).then(res=>res.json());
+        }
+      }) 
+      newData.hashedUrl=response.data.hashedUrl;
+      setUrl("");
       setProcessing(false);
-      dispatch(addUrl(response))
+      dispatch(addUrl(response.data))
     } catch (error) {
-      console.log(error+"err");
+      window.alert("Error: Check this url might esist already");
+      setProcessing(false);
     }
   }
   return (

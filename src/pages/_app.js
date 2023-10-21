@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { wrapper } from '../State/Store';
 import { SessionProvider } from "next-auth/react";
 import {Nav} from '@/component/Nav';
-export default function App({ Component, pageProps: { session, ...pageProps }}) {
+ function App({ Component, pageProps: { session, ...pageProps }}) {
   const { store, props } = wrapper.useWrappedStore(pageProps);
   return (
   <SessionProvider session={session}>
@@ -24,3 +24,4 @@ export default function App({ Component, pageProps: { session, ...pageProps }}) 
   </SessionProvider>
   )
 }
+export default App

@@ -10,31 +10,32 @@ import { useDispatch, useSelector } from 'react-redux'
   const obj_arr=useSelector(state=>state.urls.all_urls)
   const session= useSession();
   const [deleteing,setDeleting]=useState(false)
-  const getUrls= async () => {
-    try {
-          const res = await fetch('http://localhost:3000/api/findUrls', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email: session?.data?.user?.email }),
-          });
-          const data= await res.json();
-          return data;
-      }
-      catch (error) {
-          console.log(error+" got error ");
-          throw error
+  useEffect(()=>{
+    const getUrls= async () => {
+      try {
+            const res = await fetch('/api/findUrls', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email: session?.data?.user?.email }),
+            });
+            const data= await res.json();
+            console.log(data)
+            return data;
         }
-  };
-useEffect(()=>{
-  getUrls().then(data=>{dispatch(setSlice(data))})
-},[])
+        catch (error) {
+            console.log(error+" got error ");
+            throw error
+          }
+    };
+    getUrls().then(data=>{dispatch(setSlice(data))})
+  },[session, dispatch])
   const handleDelete=async (id,e,key)=>{
     setDeleting(true)
     e.preventDefault();
     try {
-        const response=await fetch('http://localhost:3000/api/deleteUrl',{
+        const response=await fetch('/api/deleteUrl',{
         method:"POST",
         body:JSON.stringify({id:id}),
         headers: {
@@ -68,8 +69,14 @@ useEffect(()=>{
                   return(
                   <tr key={key} className='row space-x-3 even:bg-gray-600 '>
                     <td className='col'>{key+1}</td>
-                    <td className='col' data-header="Id:">{url.fullUrl.length>30?url.fullUrl.slice(0,30)+"...":url.fullUrl}</td>
-                    <td className='col'data-header="Title:"><Link href={url.fullUrl}>{url.hashedUrl}</Link>{!deleteing?<AiFillDelete className='inline text-red-400 mx-2 cursor-pointer' onClick={(e)=>handleDelete(url.id,e,key)}/>:<AiOutlineLoading className='inline text-red-400 mx-2'/>}</td>   
+                    <td className='col' data-header="Id:">{url.fullUrl?.length>30?url.fullUrl.slice(0,30)+"...":url.fullUrl}</td>
+                    <td className='col'data-header="Title:">
+                    {url?.fullUrl && url?.hashedUrl ? (
+                  <Link href={url.fullUrl}>{url.hashedUrl}</Link>
+                ) : (
+                  'Missing URL Data'
+                )}
+                      {!deleteing?<AiFillDelete className='inline text-red-400 mx-2 cursor-pointer' onClick={(e)=>handleDelete(url.id,e,key)}/>:<AiOutlineLoading className='inline text-red-400 mx-2'/>}</td>   
                   </tr>
                   )
               })
