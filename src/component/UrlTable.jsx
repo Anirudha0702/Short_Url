@@ -4,28 +4,28 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import {AiFillDelete,AiOutlineLoading} from "react-icons/ai"
 import { useDispatch, useSelector } from 'react-redux'
-
+import axios from 'axios'
  const UrlTable = () => { 
   const dispatch=useDispatch();
   const obj_arr=useSelector(state=>state.urls.all_urls)
   const session= useSession();
   const [deleteing,setDeleting]=useState(false)
   useEffect(()=>{
+    const email = session?.data?.user?.email;
     const getUrls= async () => {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        params: { email }
+      };
       try {
-            const res = await fetch('/api/findUrls', {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ email: session?.data?.user?.email }),
-            });
-            const data= await res.json();
-            console.log(data)
-            return data;
+            const  res= await axios.get('/api/findUrls',config);
+            return res.data;
         }
         catch (error) {
             console.log(error+" got error ");
-            throw error
+            throw Error(error);
           }
     };
     getUrls().then(data=>{dispatch(setSlice(data))})
