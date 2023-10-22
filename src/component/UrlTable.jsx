@@ -24,9 +24,16 @@ import axios from 'axios'
             return res.data;
         }
         catch (error) {
-            console.log(error+" got error ");
-            throw Error(error);
+          if (error.response) {
+            console.error('Error:', error.response.data.error);
+          } 
+          else if (error.request) {
+            console.error('Network error:', error.request);
+          } 
+          else {
+            console.error('Error:', error.message);
           }
+        }
     };
     getUrls().then(data=>{dispatch(setSlice(data))})
   },[session, dispatch])
