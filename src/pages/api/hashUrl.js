@@ -12,6 +12,7 @@ export default async function handler(req, res) {
           user_email: email,
         },
       });
+      console.log(_finds.length)
       if (_finds.length > 0) {
         await prisma.$disconnect();
         throw new Error('This URL ALREADY EXISTS');

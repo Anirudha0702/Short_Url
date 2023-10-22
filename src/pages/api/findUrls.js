@@ -1,7 +1,6 @@
 import {prisma} from "../../lib/prisma"
 export default async function handler(req, res) {
   const {email}=req.query
-  console.log(email)
   try {
     const user = await prisma.Url.findMany({
         where: {

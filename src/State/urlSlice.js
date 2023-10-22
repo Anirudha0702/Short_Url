@@ -11,6 +11,10 @@ export const urlSlice=createSlice({
         setSlice:(state,action)=>{
             state.all_urls=action.payload
         },
+        updateIsDeleting: (state, action) => {
+            const { key, isDeleting } = action.payload;
+            state.all_urls[key].isDeleting = isDeleting;
+          },
         addUrl:(state,action)=>{
             state.all_urls=[...state.all_urls,action.payload];
         },
@@ -22,6 +26,6 @@ export const urlSlice=createSlice({
         },
     },
 });
-export const {deleteUrl,addUrl,setSlice,getDefault}=urlSlice.actions;
+export const {deleteUrl,addUrl,setSlice,getDefault,updateIsDeleting}=urlSlice.actions;
 export const urls=(state)=>state.urls.all_urls;
 export default urlSlice.reducer;

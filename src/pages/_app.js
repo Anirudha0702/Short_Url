@@ -14,7 +14,7 @@ import {Nav} from '@/component/Nav';
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     </Head>
     <Provider store={store}>
-      <div className="container text-gray-200 mx-auto max-w-full  bg-gray-900 h-screen">
+      <div className="container text-gray-200 mx-auto max-w-full  bg-gray-900 min-h-screen">
           <Nav/>
           <div className=" text-white ">
             <Component {...pageProps} />

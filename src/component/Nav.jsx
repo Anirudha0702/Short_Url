@@ -7,7 +7,7 @@ import { useSession ,signIn, signOut, } from 'next-auth/react';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { addUrl } from '@/State/urlSlice';
-
+import {AiOutlineLoading} from "react-icons/ai"
 export const Nav = () => {
   const [url,setUrl]=useState("");
   const [processing,setProcessing]=useState(false);
@@ -16,7 +16,7 @@ export const Nav = () => {
   const user=session.data?.user;
   const handelShort=async(e)=>{
     e.preventDefault();
-    const newData={email:user.email,url:url,name:user.name};
+    const newData={email:user.email,url:url.trimStart(),name:user.name};
     try {
       setProcessing(true);
       const response= await axios.post('/api/hashUrl', newData, {
@@ -27,14 +27,19 @@ export const Nav = () => {
       newData.hashedUrl=response.data.hashedUrl;
       setUrl("");
       setProcessing(false);
+      response.data.isDeleting=false;
       dispatch(addUrl(response.data))
     } catch (error) {
-      window.alert("Error: Check this url might esist already");
+      console.log(error)
+      if(error.response.data.error==="connect ECONNREFUSED ::1:80k_")
+        window.alert("Invaild URL or URL is not reachable");
+      else 
+        window.alert("Error: Check this url might esist already");
       setProcessing(false);
     }
   }
   return (
-    <div className=' flex gap-5 relative justify-center items-center flex-col border-b border-red-400 w-full h-1/2'>
+    <div className=' flex gap-5 relative justify-center items-center flex-col border-b border-red-400 w-full h-[50svh]'>
       <h3 className='text-4xl'><FaSlackHash className='inline bg-blue-600 rounded-lg p-1 '/> Hashify</h3>
       {
         session.status!='authenticated'?(
@@ -57,7 +62,7 @@ export const Nav = () => {
           <div className="w-[80%] max-w-lg rounded-lg p-1 flex items-center justify-around h-14 bg-white">
             <label htmlFor="url"><AiOutlineLink className='text-gray-900'/></label>
             <input type="text" placeholder="Enter your URL"name="url"className='pl-1 w-[70%]  focus:outline-none focus:border-b-2 border-black text-black' value={url}onChange={e=>setUrl(e.target.value)}/>
-            <button className={[processing | url.length===0?' h-9 rounded-sm px-3 cursor-not-allowed bg-slate-500':'bg-black h-9 rounded-sm px-3']} disabled={processing | url.length===0?true:false}onClick={e=>{handelShort(e)}}>{!processing?"Generate":"Processiing"}</button>
+            <button className={[processing | url.length===0?' h-9 rounded-sm px-3 cursor-not-allowed bg-slate-500':'bg-black h-9 rounded-sm px-3']} disabled={processing | url.length===0?true:false}onClick={e=>{handelShort(e)}}>{!processing?"Generate":<AiOutlineLoading className='inline text-white  mx-2 animate-spin'/>}</button>
           </div>
           </>
         )
