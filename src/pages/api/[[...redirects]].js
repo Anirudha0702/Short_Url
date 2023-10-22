@@ -14,6 +14,7 @@ export default async function handler(req, res) {
       await prisma.$disconnect()
       return res.redirect(301,_URL.fullUrl);
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: error.message });
   }
 }
