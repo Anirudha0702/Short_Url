@@ -11,3 +11,4 @@ The project includes the following key features:
 
 ## INFO
 User can access urls by loging in or by visiting short-url-mu-eight.vercel.app/api/[emailID]/[uniqueHashID]
+<!-- /// index-3f9ca9a8f278b0f4.js:1 Uncaught (in promise) TypeError: Failed to execute 'fetch' on 'Window': Request with GET/HEAD method cannot have body. -->
